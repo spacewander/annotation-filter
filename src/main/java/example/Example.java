@@ -2,7 +2,6 @@ package example;
 
 import filter.After;
 import filter.Before;
-import filter.loader.FilterLoader;
 
 /**
  * Created by zexuan.lzx on 2015/8/9.
@@ -30,14 +29,5 @@ public class Example {
     @Before(methods = {"beforeFilter", "beforeFilter2"})
     public void runWithParam(String s) {
         System.out.println("run with " + s);
-    }
-
-    public static void main(String[] param) {
-        Example example = new Example();
-//        example.run();
-        FilterLoader filterLoader = new FilterLoader(example);
-        filterLoader.runMethod("run");
-        System.out.println("");
-        filterLoader.runMethod("runWithParam", "param A");
     }
 }

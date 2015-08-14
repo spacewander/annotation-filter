@@ -1,33 +1,22 @@
-package filter.loader;
+package filter.wrapper;
 
 import filter.After;
 import filter.Before;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * Created by zexuan.lzx on 2015/8/9.
  */
-public class FilterLoader {
-    private Object target;
-    private Class metaData;
-
-    public FilterLoader(Object filterObject) {
-        target = filterObject;
-        metaData = filterObject.getClass();
+public class FilterWrapper extends Wrapper {
+    public FilterWrapper(Object filtedObject) {
+        super(filtedObject);
     }
 
+    @Override
     public void runMethod(String methodName,  Object... params) {
         try {
-            int length = params.length;
-            Class[] parameterTypes = new Class[length];
-            for (int i = 0; i < length; i++) {
-                parameterTypes[i] = params[i].getClass();
-            }
-            Method method = metaData.getDeclaredMethod(methodName, parameterTypes);
-
+            prepareMethod(methodName, params);
             // invoke before filters
             Before before = method.getAnnotation(Before.class);
             if (before != null) {
@@ -39,8 +28,7 @@ public class FilterLoader {
                 }
             }
 
-            // invoke method
-            method.invoke(target, params);
+            invoke();
 
             // invoke after filters
             After after = method.getAnnotation(After.class);
